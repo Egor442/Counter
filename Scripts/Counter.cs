@@ -7,12 +7,13 @@ public class Counter : MonoBehaviour
     [SerializeField] private TMP_Text _countText;
     [SerializeField] private float _delay;
 
+    private Coroutine _coroutine;
     private int _count;
     private bool _isCount;
 
     private void Start()
     {
-        StartCoroutine(TryAddCount());
+        _coroutine = StartCoroutine(TryAddCount());
     }
 
     private void Update()
