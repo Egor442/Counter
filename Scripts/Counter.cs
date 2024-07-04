@@ -20,8 +20,11 @@ public class Counter : MonoBehaviour
     private void Update()
     {
         if (Input.GetMouseButtonDown(0))
-        {           
-                ToggleCounting();
+        {
+            SwitchCounting();
+
+            TryStart();
+            TryStop();
         }
     }
 
@@ -31,20 +34,17 @@ public class Counter : MonoBehaviour
         {
             yield return new WaitForSeconds(_delay);
 
-            if (_isCount)
-            {
-                _count++;
-                _countText.text = "Count: " + _count.ToString();
-            }          
+            _count++;
+            _countText.text = "Count: " + _count.ToString();
         }
     }
 
-    private void ToggleCounting()
+    private void SwitchCounting()
     {
         _isCount = !_isCount;
     }
 
-    private void Stop()
+    private void TryStop()
     {
         if (_isCount == false)
         {
@@ -52,6 +52,17 @@ public class Counter : MonoBehaviour
             {
                 StopCoroutine(_coroutine);
             }
-        }        
+        }
+    }
+
+    private void TryStart()
+    {
+        if (_isCount)
+        {
+            if (_coroutine != null)
+            {
+                _coroutine = StartCoroutine(TryAddCount());
+            }
+        }
     }
 }
