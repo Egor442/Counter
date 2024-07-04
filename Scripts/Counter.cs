@@ -14,7 +14,7 @@ public class Counter : MonoBehaviour
     private void Start()
     {
         _isCount = true;
-        _coroutine = StartCoroutine(TryAddCount());
+        TryStart();
     }
 
     private void Update()
@@ -30,18 +30,28 @@ public class Counter : MonoBehaviour
 
     private IEnumerator TryAddCount()
     {
-        while (enabled)
-        {
-            yield return new WaitForSeconds(_delay);
+        var wait = new WaitForSeconds(_delay);
 
+        while (enabled)
+        {                
             _count++;
-            _countText.text = "Count: " + _count.ToString();
+            _countText.text = $"Count: {_count}";
+
+            yield return wait;
         }
     }
 
     private void SwitchCounting()
     {
         _isCount = !_isCount;
+    }
+
+    private void TryStart()
+    {
+        if (_isCount)
+        {
+            _coroutine = StartCoroutine(TryAddCount());
+        }
     }
 
     private void TryStop()
@@ -51,17 +61,6 @@ public class Counter : MonoBehaviour
             if (_coroutine != null)
             {
                 StopCoroutine(_coroutine);
-            }
-        }
-    }
-
-    private void TryStart()
-    {
-        if (_isCount)
-        {
-            if (_coroutine != null)
-            {
-                _coroutine = StartCoroutine(TryAddCount());
             }
         }
     }
